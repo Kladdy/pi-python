@@ -4,9 +4,9 @@ import os
 import time
 import numpy as np
 from constants import models_path
-from matplotlib import pyplot as plt
 from toolbox import load_file
 from termcolor import cprint
+import tflite_runtime.interpreter as tflite
 from tflite_runtime.interpreter import Interpreter 
 # -------
 
@@ -37,8 +37,9 @@ cprint("Starting inference test for Pi 3B...", "yellow")
 
 # Load model
 #model = load_model(f'{models_path}/model.{run_name}.h5')
-path_to_model = f'{models_path}/model.{run_name}.tflite'
-interpreter = Interpreter(path_to_model, num_threads=n_threads)
+path_to_model = f'{models_path}/model.{run_name}_quantized_edgetpu.tflite'
+interpreter = Interpreter(path_to_model, num_threads=n_threads,
+                            experimental_delegates=[tflite.load_delegate('libedgetpu.so.1')])
 interpreter.allocate_tensors()
 
 # Get input tensor.
@@ -101,20 +102,6 @@ for batch_size in batch_sizes:
 
 print(times_mean)
 print(times_std)
-
-fig, ax = plt.subplots(1,1)
-
-ax.set_xscale("log")
-ax.set_yscale("log")
-
-ax.errorbar(batch_sizes, times_mean, fmt="o", yerr=times_std)
-
-ax.set(title='Time per inference over events per inference')
-ax.set(xlabel="Events per inference")
-ax.set(ylabel="Time per inference (s)")
-# plt.xlabel("Batch size")
-# plt.ylabel("Time")
-plt.savefig(f"{plots_dir}/model_{run_name}_file_{i_file}_threads_{n_threads}_inference_test.png")
 
 with open(f'{plots_dir}/model_{run_name}_file_{i_file}_threads_{n_threads}_inference_test.npy', 'wb') as f:
     np.save(f, batch_sizes)

@@ -18,10 +18,12 @@ plots_dir = "plots"
 parser = argparse.ArgumentParser(description='Test inference speed on dl1 machine')
 parser.add_argument("run_id", type=str, help="the id of the run, eg '3.2' for run3.2")
 parser.add_argument("i_file", type=int, help="the id of file to do inference on")
+parser.add_argument("--eps", dest="eps", action="store_true", help="if save as eps or not")
 
 args = parser.parse_args()
 run_id = args.run_id
 i_file = args.i_file
+eps = args.eps
 
 n_threads_list = [1,3]
 threads_colors = ["dodgerblue", "forestgreen", "darkorange"]
@@ -34,12 +36,12 @@ run_name = f"run{run_id}"
 if not os.path.exists(plots_dir):
     os.makedirs(plots_dir)
 
-cprint("Starting plotting of inference test for Pi 3B...", "yellow")
+cprint("Starting plotting of inference test for Coral Dev board...", "yellow")
 
 fig, ax = plt.subplots(1,1)
 
-x_logspace = np.logspace(np.log(4), np.log(150))
-x_logspace = np.array([4.0, 150.0])
+x_logspace = np.logspace(np.log10(4), np.log10(150))
+#x_logspace = np.array([4.0, 150.0])
 
 for i in range(len(n_threads_list)):
     n_threads = n_threads_list[i]
@@ -75,25 +77,23 @@ for i in range(len(n_threads_list)):
 
 
 
-
-
-ax.set(title='Amount of time for one inference as a function of events\nper inference when inferencing on a Raspberry Pi 3B')
+ax.set(title='Amount of time for one inference as a function of events per \ninference when inferencing on an Edge TPU Dev Board')
 ax.set(xlabel=r"Events per inference $N_{events, inf}$")
 ax.set(ylabel=r"Time per inference $t_{inf}$ (s)")
-plt.xlim(4, 120)
-plt.ylim(0.15, 10)
+#plt.xlim(4, 120)
+#plt.ylim(0.15, 10)
 plt.tight_layout()
 
 fig.legend(loc="upper left")
 
-plt.savefig(f"{plots_dir}/FINAL_model_{run_name}_file_{i_file}_inference_plot_raspberryPi.eps", format="eps")
-#plt.savefig(f"{plots_dir}/FINAL_model_{run_name}_file_{i_file}_inference_plot_raspberryPi.png")
+print("Do save as eps?", eps)
 
+if eps:
+    plt.savefig(f"{plots_dir}/FINAL_model_{run_name}_file_{i_file}_inference_plot_Coral.eps", format="eps")
+else:
+    plt.savefig(f"{plots_dir}/FINAL_model_{run_name}_file_{i_file}_inference_plot_Coral.png")
 
-
-#plt.savefig(f"{plots_dir}/model_{run_name}_file_{i_file}_threads_{n_threads}_inference_plot.png")
-
-cprint("Inference plot for Pi 3B done!", "green")
+cprint("Inference plot for Coral Dev board!", "green")
 
 
 
