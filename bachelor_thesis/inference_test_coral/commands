@@ -1,0 +1,2 @@
+scp scp-files/labels_1-3_LPDA_2of4_100Hz_4LPDA_1dipole_fullband_0000.npy mendel@Coral:/tmp
+scp scp-files/data_1-3_LPDA_2of4_100Hz_4LPDA_1dipole_fullband_0000.npy mendel@Coral:/tmp

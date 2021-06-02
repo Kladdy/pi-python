@@ -56,7 +56,7 @@ print("Input details:", input_details)
 # Load test file data
     # Load first file
 data = load_file(i_file, n_events_to_load)
-
+predictions = np.zeros((n_events_to_load, 3))
 # Amount of times to do 1-inferences:
 times = []
 
@@ -81,6 +81,12 @@ for i in range(N):
     interpreter.invoke()
 
     t = time.time() - t0
+
+    # Get the results and store it
+    res = common.output_tensor(interpreter, 0)[0]
+
+    predictions[i,:] = res
+    print(res[0])
 
     if i != 0:
         times.append(t)

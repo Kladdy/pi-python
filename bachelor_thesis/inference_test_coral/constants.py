@@ -1,3 +1,6 @@
-models_path = "/tmp/bachelor/final_models"
-datapath = "/tmp/bachelor"
+#models_path = "/tmp"
+models_path = "/home/mendel/pi-python/bachelor_thesis/inference_test_coral/models"
+datapath = "/tmp"
+#datapath = "/home/mendel/pi-python/bachelor_thesis/inference_test_coral/data"
 data_filename = "data_1-3_LPDA_2of4_100Hz_4LPDA_1dipole_fullband_"
+label_filename = "labels_1-3_LPDA_2of4_100Hz_4LPDA_1dipole_fullband_"
